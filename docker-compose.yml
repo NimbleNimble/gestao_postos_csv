@@ -1,18 +1,45 @@
 services:
-  # FRONTEND
-   # Vue + Vuetify
+  # FRONTEND (Vue + Vuetify)
+  frontend:
+    build: ./frontend
+    container_name: pdv_frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
 
-  # BACKEND
-   # Node + Express
-
-  # DATABASE
+  # BACKEND (Node + Express)
+  backend:
+    build: ./backend
+    container_name: pdv_backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: pdv_db
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      
+  # DATABASE (PostgreSQL)
   db:
     image: postgres:16-alpine
     container_name: pdv_postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: suasenhaaqui
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: pdv_db
     ports:
       - "5432:5432"
