@@ -1,0 +1,23 @@
+services:
+  # FRONTEND
+   # Vue + Vuetify
+
+  # BACKEND
+   # Node + Express
+
+  # DATABASE
+  db:
+    image: postgres:16-alpine
+    container_name: pdv_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: suasenhaaqui
+      POSTGRES_DB: pdv_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
