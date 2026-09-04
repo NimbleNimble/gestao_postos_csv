@@ -4,7 +4,7 @@
     <v-main>
       <v-container>
         <v-file-upload v-model="file"
-         @change="handleFileUpload"
+         @change="handleFileUpload(file)"
          class="mt-7" density="comfortable"  variant="comfortable" title="Importar arquivo"></v-file-upload>
       </v-container>
       <v-container>

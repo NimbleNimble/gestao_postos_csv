@@ -2,7 +2,7 @@
 // TODO: Mover para .env
 const API_URL = 'http://localhost:3000'
 
-export const sendFile = (file) => {
+export const uploadFile = (file) => {
     const formData = new FormData()
     formData.append('file', file)
     return fetch(`${API_URL}/upload`, {
