@@ -3,7 +3,12 @@
     <v-app-bar color="primary" title="Gestão de Postos" />
     <v-main>
       <v-container>
-        <v-file-upload class="mt-7" density="comfortable"  variant="comfortable" title="Importar arquivo"></v-file-upload>
+        <v-file-upload v-model="file"
+         @change="handleFileUpload"
+         class="mt-7" density="comfortable"  variant="comfortable" title="Importar arquivo"></v-file-upload>
+      </v-container>
+      <v-container>
+        <v-divider class="mt-0 mb-6"></v-divider>
       </v-container>
       <v-container>
         <v-card class="pa-4" elevation="2">
@@ -27,6 +32,11 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { uploadFile } from './services/dataService'
+
+const file = ref(null)
+
 const mock_headers = [
     { title: 'Boat Type', align: 'start', key: 'name' },
     { title: 'Speed(knots)', align: 'end', key: 'speed' },
@@ -107,4 +117,8 @@ const mock_data = [
     year: 2022,
     },
 ]
+
+function handleFileUpload(file) {
+    uploadFile(file)
+}
 </script>
