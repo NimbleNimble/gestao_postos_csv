@@ -5,41 +5,44 @@
 - responsavel_id (FK -> responsaveis.id)
 - bandeira_id (FK -> bandeiras.id)
 - municipio_id (FK -> municipios.id)
+- status_id (FK -> status.id)
 - cnpj (UNIQUE)
-- nome (UNIQUE)
-- nome_fantasia
-- logradouro
-- numero
-- complemento
-- bairro
+- nome (VARCHAR/UNIQUE)
+- nome_fantasia (VARCHAR)
+- logradouro (VARCHAR)
+- numero (INT)
+- complemento (VARCHAR)
+- bairro (VARCHAR)
 - cep
-- status // TODO: Enum ou realacional
 - data_inauguracao (DATE)
-- numero_de_bicos
-- numero_de_pistas
-- observacoes
+- numero_de_bicos (INT)
+- numero_de_pistas (INT)
+- observacoes (VARCHAR)
 
 ### responsaveis
 - id (PK)
 - cpf (UNIQUE)
-- nome
+- nome (VARCHAR)
 - email (UNIQUE)
-- cargo // TODO: Enum ou realacional
+- cargo (VARCHAR)
 
 ### bandeiras
 - id (PK)
-- nome (UNIQUE)
+- nome (VARCHAR/UNIQUE)
 
 ### combustiveis
 - id (PK)
-- nome (UNIQUE)
+- nome (VARCHAR/UNIQUE)
 
 ### municipios
 - id (PK)
-- nome
+- nome (VARCHAR)
 - uf (CHAR 2)
 
 ### postos_combustiveis
 - posto_id (FK -> postos.id)
 - combustivel_id (FK -> combustiveis.id)
 
+### status
+- id (PK)
+- nome (VARCHAR)
