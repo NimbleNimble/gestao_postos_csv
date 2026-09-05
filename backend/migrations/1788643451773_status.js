@@ -11,7 +11,7 @@ export const shorthands = undefined;
 export const up = (pgm) => {
   pgm.createTable("status", {
     id: "id",
-    nome: { type: "varchar(255)", notNull: true },
+    nome: { type: "varchar(255)", notNull: true, unique: true },
   });
 };
 
