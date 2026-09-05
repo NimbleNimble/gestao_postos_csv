@@ -22,16 +22,15 @@ app.get("/", (req, res) => {
 });
 
 app.post("/upload", upload.single("file"), (req, res) => {
-  if (!req.file) {
-    return res
-      .status(400)
-      .json({ status: "error", message: "Nenhum arquivo enviado" });
-  }
+  const isEmptyFile = !req.file || req.file.size === 0;
+  const isCsvFile = req.file && req.file.originalname.endsWith(".csv");
+  const isValid = () => !isEmptyFile && isCsvFile;
 
-  if (!req.file.originalname.endsWith(".csv")) {
+  if (!isValid()) {
+    const errorMessage = !isCsvFile ? "Extensão inválida. Arquivo enviado não é CSV" : "Nenhum arquivo enviado";
     return res.status(400).json({
       status: "error",
-      message: "Extensão inválida. Arquivo enviado não é CSV",
+      message: errorMessage,
     });
   }
 
