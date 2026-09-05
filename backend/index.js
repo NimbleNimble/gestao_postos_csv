@@ -28,14 +28,30 @@ app.post("/upload", upload.single("file"), (req, res) => {
       .json({ status: "error", message: "Nenhum arquivo enviado" });
   }
 
+  if (!req.file.originalname.endsWith(".csv")) {
+    return res.status(400).json({
+      status: "error",
+      message: "Extensão inválida. Arquivo enviado não é CSV",
+    });
+  }
+
   const content = req.file.buffer.toString("utf-8");
   const lines = content.split(/\r?\n/).filter(Boolean);
+  const headers = lines[0].split(";");
+  const data = lines.slice(1).map((line) => {
+    const values = line.split(";");
+    return headers.reduce((acc, header, index) => {
+      acc[header] = values[index];
+      return acc;
+    }, {});
+  });
 
   res.json({
     status: "ok",
     filename: req.file.originalname,
     size: req.file.size,
-    lineCount: lines.length,
+    dataCount: data.length,
+    data: data,
   });
 });
 
