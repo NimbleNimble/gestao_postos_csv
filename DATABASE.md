@@ -2,8 +2,9 @@
 
 ### postos
 - id (PK)
-- responsavel_id (FK)
-- bandeira_id (FK)
+- responsavel_id (FK -> responsaveis.id)
+- bandeira_id (FK -> bandeiras.id)
+- municipio_id (FK -> municipios.id)
 - cnpj (UNIQUE)
 - nome (UNIQUE)
 - nome_fantasia
@@ -11,8 +12,6 @@
 - numero
 - complemento
 - bairro
-- municipio // TODO: deve ser criado relacionamento tbm?
-- uf // TODO: mannter sigla?
 - cep
 - status // TODO: Enum ou realacional
 - data_inauguracao (DATE)
@@ -35,6 +34,12 @@
 - id (PK)
 - nome (UNIQUE)
 
+### municipios
+- id (PK)
+- nome
+- uf (CHAR 2)
+
 ### postos_combustiveis
-- posto_id (FK)
-- combustivel_id (FK)
+- posto_id (FK -> postos.id)
+- combustivel_id (FK -> combustiveis.id)
+
