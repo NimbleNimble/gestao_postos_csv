@@ -6,14 +6,14 @@
 - bandeira_id (FK -> bandeiras.id)
 - municipio_id (FK -> municipios.id)
 - status_id (FK -> status.id)
-- cnpj (UNIQUE)
-- nome (VARCHAR/UNIQUE)
+- cnpj (UNIQUE/CHAR 14)
+- nome (UNIQUE/VARCHAR)
 - nome_fantasia (VARCHAR)
 - logradouro (VARCHAR)
 - numero (INT)
 - complemento (VARCHAR)
 - bairro (VARCHAR)
-- cep
+- cep (VARCHAR 8)
 - data_inauguracao (DATE)
 - numero_de_bicos (INT)
 - numero_de_pistas (INT)
@@ -21,18 +21,18 @@
 
 ### responsaveis
 - id (PK)
-- cpf (UNIQUE)
+- cpf (UNIQUE/CHAR 11)
 - nome (VARCHAR)
-- email (UNIQUE)
+- email (UNIQUE/VARCHAR)
 - cargo (VARCHAR)
 
 ### bandeiras
 - id (PK)
-- nome (VARCHAR/UNIQUE)
+- nome (UNIQUE/VARCHAR)
 
 ### combustiveis
 - id (PK)
-- nome (VARCHAR/UNIQUE)
+- nome (UNIQUE/VARCHAR)
 
 ### municipios
 - id (PK)
