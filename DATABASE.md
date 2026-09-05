@@ -1,11 +1,12 @@
 ## Modelagem DB
 
 ### postos
-- id
+- id (PK)
+- responsavel_id (FK)
+- bandeira (FK)
 - cnpj
 - nome
 - nome_fantasia
-- fk_bandeira
 - logradouro
 - numero
 - complemento
@@ -13,7 +14,6 @@
 - municipio
 - uf
 - cep
-- fk_responsavel
 - status
 - data_inauguracao
 - numero_de_bicos
@@ -21,6 +21,7 @@
 - observacoes
 
 ### responsaveis
+- id (PK)
 - cpf_responsavel
 - nome_responsavel
 - email_responsavel
