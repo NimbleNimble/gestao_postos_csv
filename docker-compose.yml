@@ -2,7 +2,7 @@ services:
   # FRONTEND (Vue + Vuetify)
   frontend:
     build: ./frontend
-    container_name: pdv_frontend
+    container_name: ipdv_frontend
     restart: always
     ports:
       - "5173:5173"
@@ -15,7 +15,7 @@ services:
   # BACKEND (Node + Express)
   backend:
     build: ./backend
-    container_name: pdv_backend
+    container_name: ipdv_backend
     restart: always
     ports:
       - "3000:3000"
@@ -25,7 +25,8 @@ services:
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
-      DB_NAME: pdv_db
+      DB_NAME: ipdv_db
+      DATABASE_URL: postgres://postgres:postgres@db:5432/ipdv_db
     depends_on:
       - db
     volumes:
@@ -35,12 +36,12 @@ services:
   # DATABASE (PostgreSQL)
   db:
     image: postgres:16-alpine
-    container_name: pdv_postgres
+    container_name: ipdv_postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: pdv_db
+      POSTGRES_DB: ipdv_db
     ports:
       - "5432:5432"
     volumes:
