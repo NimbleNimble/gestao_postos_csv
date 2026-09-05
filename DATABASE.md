@@ -1,6 +1,7 @@
 ## Modelagem DB
 
 ### postos
+
 - id (PK)
 - responsavel_id (FK -> responsaveis.id)
 - bandeira_id (FK -> bandeiras.id)
@@ -20,29 +21,35 @@
 - observacoes (VARCHAR)
 
 ### responsaveis
+
 - id (PK)
-- cpf (UNIQUE/CHAR 11)
-- nome (VARCHAR)
-- email (UNIQUE/VARCHAR)
-- cargo (VARCHAR)
+- cpf (UNIQUE/CHAR 11/NOTNULL)
+- nome (VARCHAR/NOTNULL)
+- email (UNIQUE/VARCHAR/NOTNULL)
+- cargo (VARCHAR/NOTNULL)
 
 ### bandeiras
+
 - id (PK)
-- nome (UNIQUE/VARCHAR)
+- nome (UNIQUE/VARCHAR/NOTNULL)
 
 ### combustiveis
+
 - id (PK)
-- nome (UNIQUE/VARCHAR)
+- nome (UNIQUE/VARCHAR/NOTNULL)
 
 ### municipios
+
 - id (PK)
-- nome (VARCHAR)
-- uf (CHAR 2)
+- nome (UNIQUE/VARCHAR/NOTNULL)
+- uf (CHAR 2/NOTNULL)
 
 ### postos_combustiveis
+
 - posto_id (FK -> postos.id)
 - combustivel_id (FK -> combustiveis.id)
 
 ### status
+
 - id (PK)
-- nome (VARCHAR)
+- nome (UNIQUE/VARCHAR/NOTNULL)
