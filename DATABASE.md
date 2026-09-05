@@ -3,37 +3,37 @@
 ### postos
 - id (PK)
 - responsavel_id (FK)
-- bandeira (FK)
-- cnpj
-- nome
+- bandeira_id (FK)
+- cnpj (UNIQUE)
+- nome (UNIQUE)
 - nome_fantasia
 - logradouro
 - numero
 - complemento
 - bairro
-- municipio
-- uf
+- municipio // TODO: deve ser criado relacionamento tbm?
+- uf // TODO: mannter sigla?
 - cep
-- status
-- data_inauguracao
+- status // TODO: Enum ou realacional
+- data_inauguracao (DATE)
 - numero_de_bicos
 - numero_de_pistas
 - observacoes
 
 ### responsaveis
 - id (PK)
-- cpf_responsavel
-- nome_responsavel
-- email_responsavel
-- cargo_responsavel
+- cpf (UNIQUE)
+- nome
+- email (UNIQUE)
+- cargo // TODO: Enum ou realacional
 
 ### bandeiras
 - id (PK)
-- nome
+- nome (UNIQUE)
 
 ### combustiveis
 - id (PK)
-- nome
+- nome (UNIQUE)
 
 ### postos_combustiveis
 - posto_id (FK)
