@@ -1,3 +1,28 @@
+// TODO: Anotações
+
+/* Colunas do CSV */
+// cnpj
+// nome_posto
+// nome_fantasia
+// bandeira
+// logradouro
+// numero
+// complemento
+// bairro
+// municipio
+// uf
+// cep
+// cpf_responsavel
+// nome_responsavel
+// email_responsavel
+// cargo_responsavel
+// combustiveis
+// status
+// data_inauguracao
+// numero_bicos
+// numero_pistas
+// observacoes
+
 const uploadController = (req, res) => {
   validateFile(req, res);
 
@@ -30,7 +55,7 @@ const validateFile = (req, res) => {
 
 const convertCsvToJson = (req) => {
   const content = req.file.buffer.toString("utf-8");
-  const lines = content.split(/\r?\n/).filter(Boolean);
+  const lines = content.trim().split(/\r?\n/).filter(Boolean);
   const headers = lines[0].split(";");
   return lines.slice(1).map((line) => {
     const values = line.split(";");
