@@ -47,7 +47,10 @@ docker ps -a
 ```
 
 Monitorar logs do container
-`docker logs -f [container_id ou container_name ex: 'ipdv_backend']`
+
+```bash
+docker logs -f ${container_id ou container_name ex: 'ipdv_backend'}
+```
 
 ### Migrations
 
