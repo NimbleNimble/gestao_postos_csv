@@ -1,9 +1,8 @@
 const pool = require("../db/pool");
 
-const listController = async (req, res) => {
-  try {
-    const result = await pool.query(
-      `SELECT 
+const getPostos = async () => {
+  const result = await pool.query(
+    `SELECT 
             p.cnpj, 
             p.nome AS nome_posto, 
             p.nome_fantasia, 
@@ -43,11 +42,33 @@ const listController = async (req, res) => {
             r.cargo, 
             s.nome;
       `,
-    );
-    res.json({ status: "ok", data: result.rows });
+  );
+  return result.rows;
+};
+
+const listController = async (req, res) => {
+  try {
+    const rows = await getPostos();
+    res.json({ status: "ok", data: rows });
   } catch (err) {
     res.status(500).json({ status: "error", message: err.message });
   }
 };
 
-module.exports = listController;
+const exportController = async (req, res) => {
+  try {
+    const rows = await getPostos();
+
+    res.json({ status: "ok", data: rows });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+module.exports = {
+  listController,
+  exportController,
+};
