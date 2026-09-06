@@ -5,6 +5,13 @@ const uploadController = async (req, res) => {
 
   const jsonData = convertCsvToJson(req);
   jsonData.map(async (element) => {
+    const responsavelId = await createResponsavel({
+      cpf: element.cpf_responsavel,
+      nome: element.nome_responsavel,
+      email: element.email_responsavel,
+      cargo: element.cargo_responsavel,
+    });
+
     const bandeiraId = await createBandeira(element.bandeira);
 
     const combustiveisIds = await createCombustivel(element.combustiveis);
@@ -48,10 +55,23 @@ const convertCsvToJson = (req) => {
   });
 };
 
-const createResponsavel = (data) => {
-  // TODO: mock
-  const id = 52364;
-  return id;
+const createResponsavel = async (data) => {
+  try {
+    const result = await pool.query(
+      `
+      INSERT INTO responsaveis (cpf, nome, email, cargo)
+      VALUES ($1, $2, $3, $4)
+      ON CONFLICT (cpf)
+      DO UPDATE SET nome = EXCLUDED.nome, email = EXCLUDED.email, cargo = EXCLUDED.cargo
+      RETURNING id
+    `,
+      [data.cpf, data.nome, data.email, data.cargo],
+    );
+    return result.rows[0].id;
+  } catch (err) {
+    console.error("Error inserting responsavel:", err.message);
+    throw err;
+  }
 };
 
 const createBandeira = async (nomeBandeira) => {
