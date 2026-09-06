@@ -24,8 +24,8 @@ Upload e Processamento de CSV com validação/sanitização, persistência em ba
 
 Exibição de dados em tela
 
-- [ ] [BACK] Consultar listagem de postos no banco
-- [ ] [FRONT] Desenvolver tela/componente de listagem de postos salvos
+- [x] ~~[BACK] Consultar listagem de postos no banco~~
+- [x] ~~[FRONT] Desenvolver tela/componente de listagem de postos salvos~~
 
 ### História4: Exportação de CSV - (4h)
 

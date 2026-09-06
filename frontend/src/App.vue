@@ -3,9 +3,8 @@
     <v-app-bar color="primary" title="Gestão de Postos" />
     <v-main>
       <v-container>
-        <v-file-upload v-model="file"
-         @change="handleFileUpload(file)"
-         class="mt-7" density="comfortable"  variant="comfortable" title="Importar arquivo"></v-file-upload>
+        <v-file-upload v-model="file" @change="handleFileUpload(file)" class="mt-7" density="comfortable"
+          variant="comfortable" title="Importar arquivo"></v-file-upload>
       </v-container>
       <v-container>
         <v-divider class="mt-0 mb-6"></v-divider>
@@ -17,13 +16,8 @@
             Listagem de postos
           </v-card-title>
           <v-card-text>
-            <v-data-table-virtual
-                :headers="mock_headers"
-                :items="mock_data"
-                height="400"
-                item-value="name"
-                fixed-header
-            ></v-data-table-virtual>
+            <v-data-table-virtual :headers="dataHeaders" :items="dataContent" height="400" item-value="cnpj"
+              fixed-header></v-data-table-virtual>
           </v-card-text>
         </v-card>
       </v-container>
@@ -32,93 +26,44 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { uploadFile } from './services/dataService'
+import { ref, onMounted } from 'vue'
+import { uploadFile, getData } from './services/dataService'
 
 const file = ref(null)
 
-const mock_headers = [
-    { title: 'Boat Type', align: 'start', key: 'name' },
-    { title: 'Speed(knots)', align: 'end', key: 'speed' },
-    { title: 'Length(m)', align: 'end', key: 'length' },
-    { title: 'Price($)', align: 'end', key: 'price' },
-    { title: 'Year', align: 'end', key: 'year' },
+const dataHeaders = [
+  { title: 'CNPJ', align: 'start', key: 'cnpj' },
+  { title: 'Nome Posto', align: 'start', key: 'nome_posto' },
+  { title: 'Nome Fantasia', align: 'start', key: 'nome_fantasia' },
+  { title: 'Bandeira', align: 'start', key: 'bandeira' },
+  { title: 'Logradouro', align: 'start', key: 'logradouro' },
+  { title: 'Número', align: 'start', key: 'numero' },
+  { title: 'Complemento', align: 'start', key: 'complemento' },
+  { title: 'Bairro', align: 'start', key: 'bairro' },
+  { title: 'Município', align: 'start', key: 'municipio' },
+  { title: 'UF', align: 'start', key: 'uf' },
+  { title: 'CEP', align: 'start', key: 'cep' },
+  { title: 'CPF Responsável', align: 'start', key: 'cpf_responsavel' },
+  { title: 'Responsável', align: 'start', key: 'nome_responsavel' },
+  { title: 'Email Responsável', align: 'start', key: 'email_responsavel' },
+  { title: 'Cargo Responsável', align: 'start', key: 'cargo_responsavel' },
+  { title: 'Combustíveis', align: 'start', key: 'combustiveis' },
+  { title: 'Status', align: 'start', key: 'status' },
+  { title: 'Data da inauguração', align: 'start', key: 'data_inauguracao' },
+  { title: 'Número de Bicos', align: 'start', key: 'numero_bicos' },
+  { title: 'Número de Pistas', align: 'start', key: 'numero_pistas' },
+  { title: 'Observações', align: 'start', key: 'observacoes' }
 ]
 
-const mock_data = [
-    {
-    name: 'Speedster',
-    speed: 35,
-    length: 22,
-    price: 300000,
-    year: 2021,
-    },
-    {
-    name: 'OceanMaster',
-    speed: 25,
-    length: 35,
-    price: 500000,
-    year: 2020,
-    },
-    {
-    name: 'Voyager',
-    speed: 20,
-    length: 45,
-    price: 700000,
-    year: 2019,
-    },
-    {
-    name: 'WaveRunner',
-    speed: 40,
-    length: 19,
-    price: 250000,
-    year: 2022,
-    },
-    {
-    name: 'SeaBreeze',
-    speed: 28,
-    length: 31,
-    price: 450000,
-    year: 2018,
-    },
-    {
-    name: 'HarborGuard',
-    speed: 18,
-    length: 50,
-    price: 800000,
-    year: 2017,
-    },
-    {
-    name: 'SlickFin',
-    speed: 33,
-    length: 24,
-    price: 350000,
-    year: 2021,
-    },
-    {
-    name: 'StormBreaker',
-    speed: 22,
-    length: 38,
-    price: 600000,
-    year: 2020,
-    },
-    {
-    name: 'WindSail',
-    speed: 15,
-    length: 55,
-    price: 900000,
-    year: 2019,
-    },
-    {
-    name: 'FastTide',
-    speed: 37,
-    length: 20,
-    price: 280000,
-    year: 2022,
-    },
-]
+const dataContent = ref([])
 
 function handleFileUpload(file) {
-    uploadFile(file)
+  uploadFile(file)
 }
+
+onMounted(() => {
+  getData().then(data => {
+    dataContent.value = data.data
+  })
+});
 </script>
