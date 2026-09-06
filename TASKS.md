@@ -31,10 +31,10 @@ Exibição de dados em tela
 
 Consulta ao banco e criação de arquivo CSV
 
-- [ ] [BACK] Consultar listagem de postos no banco
+- [x] ~~[BACK] Consultar listagem de postos no banco~~
 - [ ] [BACK] Formatar dados conforme arquivo original
-- [ ] [BACK] Criar arquivo para download
-- [ ] [FRONT] Criar Botão "download/exportar" e exibir status do download
+- [x] ~~[BACK] Criar arquivo para download~~
+- [x] ~~[FRONT] Criar Botão "download/exportar" e exibir status do download~~
 
 ### História5: Documentação - (4h)
 
