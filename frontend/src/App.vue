@@ -2,7 +2,7 @@
   <v-app>
     <GestaoPostosHeaderComponent />
     <v-main>
-      <v-container class="mt-5">
+      <v-container fluid class="mt-5 px-6">
         <div class="d-flex justify-space-between align-center mb-3">
           <span class="text-h5 font-weight-thin">Listagem de Postos</span>
           <v-btn title="Exportar relatório em .CSV" text="Baixar .CSV" variant="flat" color="red-darken-4"
