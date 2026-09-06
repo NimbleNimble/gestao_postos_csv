@@ -14,10 +14,10 @@ Criação de containers, Modelagem do Banco, Setup de ambientes front e backend
 Upload e Processamento de CSV com validação/sanitização, persistência em banco
 
 - [x] ~~[FRONT] Desenvolver tela/componente "drag & drop"~~
-- [ ] [BACK] Receber dados / processar CSV
+- [x] ~~[BACK] Receber dados / processar CSV~~
 - [ ] [BACK] Sanitizar/normalizar dados
 - [ ] [BACK] Aplicar regras de negócio / lógica de validação
-- [ ] [BACK] Salvar dados no banco
+- [x] [BACK] ~~Salvar dados no banco~~
 - [ ] [FRONT/BACK] Tratar e exibir alertas de erro
 
 ### História3: Visualização - (3h)
