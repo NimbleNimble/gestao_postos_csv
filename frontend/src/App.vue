@@ -21,6 +21,11 @@
           </v-card-text>
         </v-card>
       </v-container>
+      <v-container>
+        <v-btn prepend-icon="$vuetify" variant="plain" @click="downloadCsv">
+          Download CSV
+        </v-btn>
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -59,6 +64,11 @@ const dataContent = ref([])
 
 function handleFileUpload(file) {
   uploadFile(file)
+}
+
+function downloadCsv() {
+  // TODO: Revisar/Aprimorar isto
+  window.location.href = "http://localhost:3000/list/export";
 }
 
 onMounted(() => {
