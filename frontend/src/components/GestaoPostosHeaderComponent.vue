@@ -1,18 +1,24 @@
 <template>
-    <v-app-bar color="primary" density="compact" height="120">
+    <v-app-bar color="yellow-darken-2" density="compact" height="120" class="py-5 px-5">
         <template v-slot:prepend>
-            <v-avatar size="70" color="white" variant="outlined" style="border: 5px solid white !important;">
-                <v-icon icon="mdi-gas-station" size="40" />
+            <v-avatar size="90" variant="flat" color="red" style="border: 8px solid #B71C1C !important; rotate: 20deg;">
+                <v-icon icon="mdi-gas-station" size="95" color="red-darken-4" class="mt-5" />
             </v-avatar>
         </template>
 
         <v-app-bar-title>
-            <div class="text-start">
-                <span class="text-h6">Gestão de</span>
-                <br />
-                <span class="text-h3">Postos</span>
+            <div class="text-end" style="width: 160px;">
+                <span class="d-block text-h6 text-red-darken-4">Gestão de</span>
+                <span class="d-block text-h3 text-red-darken-4" style="margin-top: -25px;"><span
+                        class="text-h2">P</span>ostos</span>
             </div>
         </v-app-bar-title>
+
+        <template v-slot:append>
+            <v-btn color="red-darken-4" variant="flat" prepend-icon="mdi-upload" aria-label="Configurações">
+                Enviar arquivo ".CSV"
+            </v-btn>
+        </template>
     </v-app-bar>
 
     <v-toolbar color="primary" density="comfortable">
