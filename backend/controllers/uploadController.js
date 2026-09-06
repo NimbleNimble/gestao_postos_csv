@@ -14,13 +14,14 @@ const uploadController = async (req, res) => {
 
     const bandeiraId = await createBandeira(element.bandeira);
 
-    const combustiveisIds = await createCombustivel(element.combustiveis);
+    const combustiveisIds = await createCombustiveis(element.combustiveis);
 
     const municipioId = await createMunicipio({
       nome: element.municipio,
       uf: element.uf,
     });
-  });
+
+    const statusId = await createStatus(element.status);
 
   res.json({
     status: "ok",
@@ -99,7 +100,7 @@ const createBandeira = async (nomeBandeira) => {
   }
 };
 
-const createCombustivel = async (combustiveisString) => {
+const createCombustiveis = async (combustiveisString) => {
   const combustiveisArray = combustiveisString.split(",");
 
   const combustiveisIds = combustiveisArray.reduce(async (acc, combustivel) => {
@@ -143,10 +144,24 @@ const createMunicipio = async (data) => {
   }
 };
 
-const createStatus = (data) => {
-  // TODO: mock
-  const id = 13579;
-  return id;
+const createStatus = async (status) => {
+  try {
+    const result = await pool.query(
+      `
+        INSERT INTO status (nome)
+        VALUES ($1)
+        ON CONFLICT (nome)
+        DO UPDATE SET nome = EXCLUDED.nome
+        RETURNING id
+      `,
+      [status],
+    );
+
+    return result.rows[0].id;
+  } catch (err) {
+    console.error("Error inserting status:", err.message);
+    throw err;
+  }
 };
 
 const createPosto = (data) => {
