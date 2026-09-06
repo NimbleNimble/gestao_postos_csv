@@ -1,9 +1,9 @@
 <template>
-    <v-app-bar color="yellow-darken-2" density="compact" height="80" class="py-3 px-5">
+    <v-app-bar color="yellow-darken-2" density="compact" height="70" class="py-3 px-5">
         <template v-slot:prepend>
             <!-- TODO: rever "style" inline -->
-            <v-avatar size="60" variant="flat" color="red" style="border: 5px solid #B71C1C !important; rotate: 20deg;">
-                <v-icon icon="mdi-gas-station" size="65" color="red-darken-4" class="mt-4" />
+            <v-avatar size="50" variant="flat" color="red" style="border: 5px solid #B71C1C !important; rotate: 20deg;">
+                <v-icon icon="mdi-gas-station" size="50" color="red-darken-4" class="mt-4" />
             </v-avatar>
         </template>
 
