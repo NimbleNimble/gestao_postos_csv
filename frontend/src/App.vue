@@ -2,26 +2,17 @@
   <v-app>
     <GestaoPostosHeaderComponent />
     <v-main>
-      <v-container>
-        <v-divider class="mt-0 mb-6"></v-divider>
+      <v-container class="mt-5">
+        <div class="d-flex justify-space-between align-center mb-3">
+          <span class="text-h5 font-weight-thin">Listagem de Postos</span>
+          <v-btn title="Exportar relatório em .CSV" text="Baixar .CSV" variant="flat" color="red-darken-4"
+            prepend-icon="mdi-download" class="font-weight-bold" @click="downloadCsv" />
+        </div>
+        <v-divider class="my-6"></v-divider>
+        <v-data-table-virtual :headers="dataHeaders" :items="dataContent" height="400" item-value="cnpj"
+          fixed-header></v-data-table-virtual>
       </v-container>
-      <v-container>
-        <v-card class="pa-4" elevation="2">
-          <v-card-title>
-            <span class="mdi mdi-gas-station"></span>
-            Listagem de postos
-          </v-card-title>
-          <v-card-text>
-            <v-data-table-virtual :headers="dataHeaders" :items="dataContent" height="400" item-value="cnpj"
-              fixed-header></v-data-table-virtual>
-          </v-card-text>
-        </v-card>
-      </v-container>
-      <v-container>
-        <v-btn prepend-icon="$vuetify" variant="plain" @click="downloadCsv">
-          Download CSV
-        </v-btn>
-      </v-container>
+
     </v-main>
   </v-app>
 </template>

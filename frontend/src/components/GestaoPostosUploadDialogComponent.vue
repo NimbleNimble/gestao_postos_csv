@@ -2,15 +2,18 @@
     <v-container>
         <v-dialog transition="dialog-bottom-transition" width="auto">
             <template v-slot:activator="{ props: activatorProps }">
-                <v-btn v-bind="activatorProps" text="Enviar arquivo .CSV" color="red-darken-4" variant="flat"
-                    prepend-icon="mdi-upload" aria-label="Enviar arquivo .CSV">
-                    Enviar arquivo ".CSV"
+                <v-btn title="Importe o relatório em arquivo CSV para atualizar a base de dados" v-bind="activatorProps"
+                    text="Importe o relatório em arquivo CSV para atualizar a base de dados" color="red-darken-4"
+                    variant="flat" prepend-icon="mdi-upload"
+                    aria-label="Importe o relatório em arquivo CSV para atualizar a base de dados"
+                    class="font-weight-bold">
+                    Enviar .CSV
                 </v-btn>
             </template>
 
             <template v-slot:default="{ isActive }">
                 <v-card>
-                    <v-toolbar title="Enviar arquivo .CSV"></v-toolbar>
+                    <v-toolbar title="Importe o relatório em arquivo CSV para atualizar a base de dados"></v-toolbar>
 
                     <v-card-text class="">
                         <!-- TODO: Melhorar texto e modal -->
@@ -30,7 +33,7 @@
 
                         <v-btn text="Enviar" variant="flat" color="text-yellow"
                             :disabled="!file || !file.name.endsWith('.csv')"
-                            @click="handleFileUpload(file); isActive.value = false" />
+                            @click="uploadFile(file); isActive.value = false" />
                     </v-card-actions>
                 </v-card>
             </template>
@@ -42,9 +45,5 @@
 import { ref } from 'vue'
 import { uploadFile } from '../services/dataService'
 const file = ref(null)
-
-function handleFileUpload(file) {
-    uploadFile(file)
-}
 
 </script>
