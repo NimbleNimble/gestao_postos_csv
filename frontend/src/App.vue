@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <GestaoPostosHeader />
+    <GestaoPostosHeaderComponent />
     <v-main>
       <v-container>
         <v-file-upload v-model="file" @change="handleFileUpload(file)" class="mt-7" density="comfortable"
@@ -33,7 +33,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { uploadFile, getData } from './services/dataService'
-import GestaoPostosHeader from './components/GestaoPostosHeader.vue'
+import GestaoPostosHeaderComponent from './components/GestaoPostosHeaderComponent.vue'
 
 const file = ref(null)
 
