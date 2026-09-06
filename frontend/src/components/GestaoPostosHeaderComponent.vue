@@ -17,9 +17,7 @@
         </v-app-bar-title>
 
         <template v-slot:append>
-            <v-btn color="red-darken-4" variant="flat" prepend-icon="mdi-upload" aria-label="Configurações">
-                Enviar arquivo ".CSV"
-            </v-btn>
+            <GestaoPostosUploadDialogComponent />
         </template>
     </v-app-bar>
 
@@ -34,3 +32,7 @@
         <v-btn icon="mdi-download" aria-label="Exportar CSV" />
     </v-toolbar>
 </template>
+
+<script setup>
+import GestaoPostosUploadDialogComponent from './GestaoPostosUploadDialogComponent.vue'
+</script>
