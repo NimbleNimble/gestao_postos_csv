@@ -14,8 +14,6 @@ const uploadController = async (req, res) => {
 
     const bandeiraId = await createBandeira(element.bandeira);
 
-    const combustiveisIds = await createCombustiveis(element.combustiveis);
-
     const municipioId = await createMunicipio({
       nome: element.municipio,
       uf: element.uf,
@@ -41,7 +39,12 @@ const uploadController = async (req, res) => {
       numero_de_pistas: element.numero_pistas,
       observacoes: element.observacoes,
     });
+
+    const combustiveisIds = await createCombustiveis(element.combustiveis);
+
+    await createPostosCombustiveis(postoId, combustiveisIds);
   });
+
   res.json({
     status: "ok",
     filename: req.file.originalname,
@@ -143,7 +146,6 @@ const createCombustiveis = async (combustiveisString) => {
 };
 
 const createMunicipio = async (data) => {
-  console.log("Creating municipio with data:", data);
   try {
     const result = await pool.query(
       `
@@ -237,7 +239,7 @@ const createPosto = async (data) => {
   }
 };
 
-const createPostosCombustiveis = (postoId, combustivelId) => {
+const createPostosCombustiveis = async (postoId, combustiveisIds) => {
   // TODO: mock
   const id = 99887;
   return id;
