@@ -23,6 +23,25 @@ const uploadController = async (req, res) => {
 
     const statusId = await createStatus(element.status);
 
+    const postoId = await createPosto({
+      responsavel_id: responsavelId,
+      bandeira_id: bandeiraId,
+      municipio_id: municipioId,
+      status_id: statusId,
+      cnpj: element.cnpj,
+      nome: element.nome_posto,
+      nome_fantasia: element.nome_fantasia,
+      logradouro: element.logradouro,
+      numero: element.numero,
+      complemento: element.complemento,
+      bairro: element.bairro,
+      cep: element.cep,
+      data_inauguracao: element.data_inauguracao,
+      numero_de_bicos: element.numero_bicos,
+      numero_de_pistas: element.numero_pistas,
+      observacoes: element.observacoes,
+    });
+  });
   res.json({
     status: "ok",
     filename: req.file.originalname,
@@ -164,10 +183,58 @@ const createStatus = async (status) => {
   }
 };
 
-const createPosto = (data) => {
-  // TODO: mock
-  const id = 11223;
-  return id;
+const createPosto = async (data) => {
+  try {
+    const result = await pool.query(
+      `
+        INSERT INTO postos (
+          responsavel_id,
+          bandeira_id,
+          municipio_id,
+          status_id,
+          cnpj,
+          nome,
+          nome_fantasia,
+          logradouro,
+          numero,
+          complemento,
+          bairro,
+          cep,
+          data_inauguracao,
+          numero_de_bicos,
+          numero_de_pistas,
+          observacoes
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+        ON CONFLICT (cnpj)
+        DO UPDATE SET cnpj = EXCLUDED.cnpj
+        RETURNING id
+      `,
+      [
+        data.responsavel_id,
+        data.bandeira_id,
+        data.municipio_id,
+        data.status_id,
+        data.cnpj,
+        data.nome,
+        data.nome_fantasia,
+        data.logradouro,
+        data.numero,
+        data.complemento,
+        data.bairro,
+        data.cep,
+        data.data_inauguracao,
+        data.numero_de_bicos,
+        data.numero_de_pistas,
+        data.observacoes,
+      ],
+    );
+
+    return result.rows[0].id;
+  } catch (err) {
+    console.error("Error inserting posto:", err.message);
+    throw err;
+  }
 };
 
 const createPostosCombustiveis = (postoId, combustivelId) => {
