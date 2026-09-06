@@ -7,10 +7,12 @@
         </template>
 
         <v-app-bar-title>
-            <div class="text-end" style="width: 160px;">
-                <span class="d-block text-h6 text-red-darken-4">Gestão de</span>
-                <span class="d-block text-h3 text-red-darken-4" style="margin-top: -25px;"><span
-                        class="text-h2">P</span>ostos</span>
+            <div class="text-end" style="width: 130px;">
+                <span class="d-block text-h5 text-red-darken-4 caacupe-one-regular">
+                    Gestão de
+                </span>
+                <span class="d-block text-h3 text-red-darken-4 bebas-neue-regular text-h3" style="margin-top: -35px;">
+                    <span class="bebas-neue-regular text-h1">P</span>ostos</span>
             </div>
         </v-app-bar-title>
 
