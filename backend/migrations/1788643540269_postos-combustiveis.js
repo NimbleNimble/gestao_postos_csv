@@ -24,6 +24,14 @@ export const up = (pgm) => {
       onDelete: "RESTRICT",
     },
   });
+
+  pgm.addConstraint(
+    "postos_combustiveis",
+    "postos_combustiveis_posto_combustivel_unique",
+    {
+      unique: ["posto_id", "combustivel_id"],
+    },
+  );
 };
 
 /**

@@ -240,9 +240,24 @@ const createPosto = async (data) => {
 };
 
 const createPostosCombustiveis = async (postoId, combustiveisIds) => {
-  // TODO: mock
-  const id = 99887;
-  return id;
+  try {
+    const queries = combustiveisIds.map((combustivelId) =>
+      pool.query(
+        `
+          INSERT INTO postos_combustiveis (posto_id, combustivel_id)
+          VALUES ($1, $2)
+          ON CONFLICT (posto_id, combustivel_id)
+          DO UPDATE SET posto_id = EXCLUDED.posto_id, combustivel_id = EXCLUDED.combustivel_id
+        `,
+        [postoId, combustivelId],
+      ),
+    );
+
+    await Promise.all(queries);
+  } catch (err) {
+    console.error("Error inserting postos_combustiveis:", err.message);
+    throw err;
+  }
 };
 
 module.exports = uploadController;
