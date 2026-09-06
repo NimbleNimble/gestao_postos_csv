@@ -6,6 +6,8 @@ const uploadController = async (req, res) => {
   const jsonData = convertCsvToJson(req);
   jsonData.map(async (element) => {
     const bandeiraId = await createBandeira(element.bandeira);
+
+    const combustiveisIds = await createCombustivel(element.combustiveis);
   });
 
   res.json({
@@ -72,10 +74,27 @@ const createBandeira = async (nomeBandeira) => {
   }
 };
 
-const createCombustivel = (data) => {
-  // TODO: mock
-  const id = 67890;
-  return id;
+const createCombustivel = async (combustiveisString) => {
+  const combustiveisArray = combustiveisString.split(",");
+
+  const combustiveisIds = combustiveisArray.reduce(async (acc, combustivel) => {
+    const result = await pool.query(
+      `
+        INSERT INTO combustiveis (nome)
+        VALUES ($1)
+        ON CONFLICT (nome)
+        DO UPDATE SET nome = EXCLUDED.nome
+        RETURNING id
+      `,
+      [combustivel],
+    );
+
+    const accResolved = await acc;
+    accResolved.push(result.rows[0].id);
+    return accResolved;
+  }, Promise.resolve([]));
+
+  return combustiveisIds;
 };
 
 const createMunicipio = (data) => {
