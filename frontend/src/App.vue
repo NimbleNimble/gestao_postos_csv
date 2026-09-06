@@ -3,10 +3,6 @@
     <GestaoPostosHeaderComponent />
     <v-main>
       <v-container>
-        <v-file-upload v-model="file" @change="handleFileUpload(file)" class="mt-7" density="comfortable"
-          variant="comfortable" title="Importar arquivo"></v-file-upload>
-      </v-container>
-      <v-container>
         <v-divider class="mt-0 mb-6"></v-divider>
       </v-container>
       <v-container>
@@ -32,10 +28,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { uploadFile, getData } from './services/dataService'
+import { getData } from './services/dataService'
 import GestaoPostosHeaderComponent from './components/GestaoPostosHeaderComponent.vue'
-
-const file = ref(null)
 
 const dataHeaders = [
   { title: 'CNPJ', align: 'start', key: 'cnpj' },
@@ -62,10 +56,6 @@ const dataHeaders = [
 ]
 
 const dataContent = ref([])
-
-function handleFileUpload(file) {
-  uploadFile(file)
-}
 
 function downloadCsv() {
   // TODO: Revisar/Aprimorar isto
