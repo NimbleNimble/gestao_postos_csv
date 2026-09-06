@@ -14,6 +14,10 @@ export const up = (pgm) => {
     nome: { type: "varchar(255)", notNull: true, unique: true },
     uf: { type: "char(2)", notNull: true },
   });
+
+  pgm.addConstraint("municipios", "municipios_nome_uf_unique", {
+    unique: ["nome", "uf"],
+  });
 };
 
 /**

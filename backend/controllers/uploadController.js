@@ -15,6 +15,11 @@ const uploadController = async (req, res) => {
     const bandeiraId = await createBandeira(element.bandeira);
 
     const combustiveisIds = await createCombustivel(element.combustiveis);
+
+    const municipioId = await createMunicipio({
+      nome: element.municipio,
+      uf: element.uf,
+    });
   });
 
   res.json({
@@ -117,10 +122,25 @@ const createCombustivel = async (combustiveisString) => {
   return combustiveisIds;
 };
 
-const createMunicipio = (data) => {
-  // TODO: mock
-  const id = 24680;
-  return id;
+const createMunicipio = async (data) => {
+  console.log("Creating municipio with data:", data);
+  try {
+    const result = await pool.query(
+      `
+        INSERT INTO municipios (nome, uf)
+        VALUES ($1, $2)
+        ON CONFLICT (nome, uf)
+        DO UPDATE SET nome = EXCLUDED.nome, uf = EXCLUDED.uf
+        RETURNING id
+      `,
+      [data.nome, data.uf],
+    );
+
+    return result.rows[0].id;
+  } catch (err) {
+    console.error("Error inserting municipio:", err.message);
+    throw err;
+  }
 };
 
 const createStatus = (data) => {
