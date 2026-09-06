@@ -1,5 +1,5 @@
 <template>
-    <v-data-table-virtual :headers="dataHeaders" :items="dataContent" height="400" item-value="cnpj"
+    <v-data-table-virtual :headers="dataHeaders" :items="dataContent" item-value="cnpj"
         fixed-header></v-data-table-virtual>
 </template>
 
