@@ -44,8 +44,8 @@ export const up = (pgm) => {
     bairro: { type: "varchar(255)" },
     cep: { type: "char(8)" },
     data_inauguracao: { type: "date" },
-    numero_de_bicos: { type: "integer" },
-    numero_de_pistas: { type: "integer" },
+    numero_bicos: { type: "integer" },
+    numero_pistas: { type: "integer" },
     observacoes: { type: "varchar(500)" },
   });
 };

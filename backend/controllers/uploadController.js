@@ -35,8 +35,8 @@ const uploadController = async (req, res) => {
       bairro: element.bairro,
       cep: element.cep,
       data_inauguracao: element.data_inauguracao,
-      numero_de_bicos: element.numero_bicos,
-      numero_de_pistas: element.numero_pistas,
+      numero_bicos: element.numero_bicos,
+      numero_pistas: element.numero_pistas,
       observacoes: element.observacoes,
     });
 
@@ -203,8 +203,8 @@ const createPosto = async (data) => {
           bairro,
           cep,
           data_inauguracao,
-          numero_de_bicos,
-          numero_de_pistas,
+          numero_bicos,
+          numero_pistas,
           observacoes
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
@@ -226,8 +226,8 @@ const createPosto = async (data) => {
         data.bairro,
         data.cep,
         data.data_inauguracao,
-        data.numero_de_bicos,
-        data.numero_de_pistas,
+        data.numero_bicos,
+        data.numero_pistas,
         data.observacoes,
       ],
     );

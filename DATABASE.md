@@ -16,8 +16,8 @@
 - bairro (VARCHAR)
 - cep (VARCHAR 8)
 - data_inauguracao (DATE)
-- numero_de_bicos (INT)
-- numero_de_pistas (INT)
+- numero_bicos (INT)
+- numero_pistas (INT)
 - observacoes (VARCHAR)
 
 ### responsaveis
