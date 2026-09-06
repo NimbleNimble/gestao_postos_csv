@@ -1,18 +1,23 @@
 <template>
-    <v-app-bar color="yellow-darken-2" density="compact" height="120" class="py-5 px-5">
+    <v-app-bar color="yellow-darken-2" density="compact" height="80" class="py-3 px-5">
         <template v-slot:prepend>
-            <v-avatar size="90" variant="flat" color="red" style="border: 8px solid #B71C1C !important; rotate: 20deg;">
-                <v-icon icon="mdi-gas-station" size="95" color="red-darken-4" class="mt-5" />
+            <!-- TODO: rever "style" inline -->
+            <v-avatar size="60" variant="flat" color="red" style="border: 5px solid #B71C1C !important; rotate: 20deg;">
+                <v-icon icon="mdi-gas-station" size="65" color="red-darken-4" class="mt-4" />
             </v-avatar>
         </template>
 
         <v-app-bar-title>
-            <div class="text-end" style="width: 130px;">
-                <span class="d-block text-h5 text-red-darken-4 caacupe-one-regular">
-                    Gestão de
+            <div class="text-end" style="width: 100px;">
+                <span class="d-block text-red-darken-4 font-weight-bold" style="font-size: 12px; ">
+                    GESTÃO DE
+
                 </span>
-                <span class="d-block text-h3 text-red-darken-4 bebas-neue-regular text-h3" style="margin-top: -35px;">
-                    <span class="bebas-neue-regular text-h1">P</span>ostos</span>
+                <span class="d-block text-red-darken-4 bebas-neue-regular" style="font-size: 40px; margin-top: -25px;
+                
+    line-height: 1.05;
+">
+                    <span class=" bebas-neue-regular" style="font-size: 60px; ">P</span>ostos</span>
             </div>
         </v-app-bar-title>
 
