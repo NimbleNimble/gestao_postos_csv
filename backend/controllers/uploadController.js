@@ -107,13 +107,22 @@ const validateFile = (req) => {
 const convertCsvToJson = (req) => {
   const content = req.file.buffer.toString("utf-8");
   const lines = content.trim().split(/\r?\n/).filter(Boolean);
-  const headers = lines[0].split(";");
-  return lines.slice(1).map((line) => {
+  if (lines.length <= 1) throw new Error("O arquivo CSV está vazio.");
+  const headers = lines[0].split(";").map((h) => h.trim());
+  return lines.slice(1).map((line, lineIndex) => {
     const values = line.split(";");
-    return headers.reduce((acc, header, index) => {
-      acc[header] = values[index];
+    const row = headers.reduce((acc, header, index) => {
+      acc[header] = values[index] !== undefined ? values[index].trim() : "";
       return acc;
     }, {});
+
+    if (!row.cnpj || !row.nome_posto) {
+      throw new Error(
+        `Linha ${lineIndex + 2}: CNPJ e Nome do Posto são obrigatórios.`,
+      );
+    }
+
+    return row;
   });
 };
 
