@@ -1,5 +1,43 @@
 const pool = require("../db/pool");
 
+const REQUIRED_HEADERS = [
+  "cnpj",
+  "nome_posto",
+  "nome_fantasia",
+  "bandeira",
+  "logradouro",
+  "numero",
+  "complemento",
+  "bairro",
+  "municipio",
+  "uf",
+  "cep",
+  "cpf_responsavel",
+  "nome_responsavel",
+  "email_responsavel",
+  "cargo_responsavel",
+  "combustiveis",
+  "status",
+  "data_inauguracao",
+  "numero_bicos",
+  "numero_pistas",
+  "observacoes",
+];
+
+const NOT_NULL_FIELDS = [
+  { key: "cnpj", label: "CNPJ" },
+  { key: "nome_posto", label: "Nome do Posto" },
+  { key: "bandeira", label: "Bandeira" },
+  { key: "municipio", label: "Município" },
+  { key: "uf", label: "UF" },
+  { key: "cpf_responsavel", label: "CPF do Responsável" },
+  { key: "nome_responsavel", label: "Nome do Responsável" },
+  { key: "email_responsavel", label: "E-mail do Responsável" },
+  { key: "cargo_responsavel", label: "Cargo do Responsável" },
+  { key: "combustiveis", label: "Combustíveis" },
+  { key: "status", label: "Status" },
+];
+
 const uploadController = async (req, res) => {
   try {
     const validationError = validateFile(req);
@@ -104,11 +142,36 @@ const validateFile = (req) => {
   }
 };
 
+const checkRequiredHeaders = (headers) => {
+  const missingHeaders = REQUIRED_HEADERS.filter((h) => !headers.includes(h));
+  if (missingHeaders.length > 0) {
+    throw new Error(
+      `Colunas obrigatórias ausentes no CSV: ${missingHeaders.join(", ")}`,
+    );
+  }
+};
+
+const checkRequiredFields = (row, lineIndex) => {
+  for (const field of NOT_NULL_FIELDS) {
+    if (!row[field.key]) {
+      throw new Error(
+        `Linha ${lineIndex + 2}: O campo "${field.label}" é obrigatório e não pode ser vazio.`,
+      );
+    }
+  }
+};
+
 const convertCsvToJson = (req) => {
   const content = req.file.buffer.toString("utf-8");
   const lines = content.trim().split(/\r?\n/).filter(Boolean);
-  if (lines.length <= 1) throw new Error("O arquivo CSV está vazio.");
+
+  if (lines.length <= 1) {
+    throw new Error("O arquivo CSV está vazio.");
+  }
+
   const headers = lines[0].split(";").map((h) => h.trim());
+  checkRequiredHeaders(headers);
+
   return lines.slice(1).map((line, lineIndex) => {
     const values = line.split(";");
     const row = headers.reduce((acc, header, index) => {
@@ -116,11 +179,7 @@ const convertCsvToJson = (req) => {
       return acc;
     }, {});
 
-    if (!row.cnpj || !row.nome_posto) {
-      throw new Error(
-        `Linha ${lineIndex + 2}: CNPJ e Nome do Posto são obrigatórios.`,
-      );
-    }
+    checkRequiredFields(row, lineIndex);
 
     return row;
   });
