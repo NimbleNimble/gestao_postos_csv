@@ -1,72 +1,106 @@
 const pool = require("../db/pool");
 
 const uploadController = async (req, res) => {
-  validateFile(req, res);
+  try {
+    const validationError = validateFile(req);
+    if (validationError) {
+      return res.status(400).json(validationError);
+    }
 
-  const jsonData = convertCsvToJson(req);
-  jsonData.map(async (element) => {
-    const responsavelId = await createResponsavel({
-      cpf: element.cpf_responsavel,
-      nome: element.nome_responsavel,
-      email: element.email_responsavel,
-      cargo: element.cargo_responsavel,
+    const jsonData = convertCsvToJson(req);
+    for (const element of jsonData) {
+      const responsavelId = await createResponsavel({
+        cpf: element.cpf_responsavel?.trim(),
+        nome: element.nome_responsavel?.trim(),
+        email: element.email_responsavel?.trim(),
+        cargo: element.cargo_responsavel?.trim(),
+      });
+
+      const bandeiraId = await createBandeira(element.bandeira?.trim());
+
+      const municipioId = await createMunicipio({
+        nome: element.municipio?.trim(),
+        uf: element.uf?.trim(),
+      });
+
+      const statusId = await createStatus(element.status?.trim());
+
+      const dataInauguracao = formatDataInauguracao(
+        element.data_inauguracao?.trim(),
+      );
+
+      const postoId = await createPosto({
+        responsavel_id: responsavelId,
+        bandeira_id: bandeiraId,
+        municipio_id: municipioId,
+        status_id: statusId,
+        cnpj: element.cnpj?.trim(),
+        nome: element.nome_posto?.trim(),
+        nome_fantasia: element.nome_fantasia?.trim(),
+        logradouro: element.logradouro?.trim(),
+        numero: element.numero ? parseInt(element.numero, 10) : null,
+        complemento: element.complemento?.trim(),
+        bairro: element.bairro?.trim(),
+        cep: element.cep?.trim(),
+        data_inauguracao: dataInauguracao,
+        numero_bicos: element.numero_bicos
+          ? parseInt(element.numero_bicos, 10)
+          : null,
+        numero_pistas: element.numero_pistas
+          ? parseInt(element.numero_pistas, 10)
+          : null,
+        observacoes: element.observacoes?.trim(),
+      });
+
+      const combustiveisIds = await createCombustiveis(element.combustiveis);
+
+      await createPostosCombustiveis(postoId, combustiveisIds);
+    }
+
+    res.json({
+      status: "ok",
+      filename: req.file.originalname,
+      size: req.file.size,
+      dataCount: jsonData?.length || 0,
+      data: jsonData || [],
     });
-
-    const bandeiraId = await createBandeira(element.bandeira);
-
-    const municipioId = await createMunicipio({
-      nome: element.municipio,
-      uf: element.uf,
+  } catch (err) {
+    console.error("Erro no processamento do upload:", err);
+    res.status(500).json({
+      status: "error",
+      message: err.message,
     });
-
-    const statusId = await createStatus(element.status);
-
-    const postoId = await createPosto({
-      responsavel_id: responsavelId,
-      bandeira_id: bandeiraId,
-      municipio_id: municipioId,
-      status_id: statusId,
-      cnpj: element.cnpj,
-      nome: element.nome_posto,
-      nome_fantasia: element.nome_fantasia,
-      logradouro: element.logradouro,
-      numero: element.numero,
-      complemento: element.complemento,
-      bairro: element.bairro,
-      cep: element.cep,
-      data_inauguracao: element.data_inauguracao,
-      numero_bicos: element.numero_bicos,
-      numero_pistas: element.numero_pistas,
-      observacoes: element.observacoes,
-    });
-
-    const combustiveisIds = await createCombustiveis(element.combustiveis);
-
-    await createPostosCombustiveis(postoId, combustiveisIds);
-  });
-
-  res.json({
-    status: "ok",
-    filename: req.file.originalname,
-    size: req.file.size,
-    dataCount: jsonData?.length || 0,
-    data: jsonData || [],
-  });
+  }
 };
 
-const validateFile = (req, res) => {
-  const isEmptyFile = !req.file || req.file.size === 0;
-  const isCsvFile = req.file?.originalname.toLowerCase().endsWith(".csv");
+const formatDataInauguracao = (dateStr) => {
+  if (!dateStr) return null;
+
+  if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+    throw new Error(
+      `Data de inauguração inválida: "${dateStr}". O formato deve ser DD/MM/AAAA.`,
+    );
+  }
+
+  const [day, month, year] = dateStr.split("/");
+  return `${year}-${month}-${day}`;
+};
+
+const validateFile = (req) => {
+  const file = req.file;
+  const isEmptyFile = !file || file.size === 0;
+  const isCsvFile = file?.originalname.toLowerCase().endsWith(".csv");
   const isValid = !isEmptyFile && isCsvFile;
 
-  if (!isValid) {
-    const errorMessage = !isCsvFile
-      ? "Extensão inválida. Arquivo enviado não é CSV"
-      : "Nenhum arquivo enviado";
-    return res.status(400).json({
+  if (isValid) {
+    return null;
+  } else if (!isCsvFile) {
+    return {
       status: "error",
-      message: errorMessage,
-    });
+      message: "Extensão inválida. Arquivo enviado não é CSV",
+    };
+  } else {
+    return { status: "error", message: "Nenhum arquivo enviado" };
   }
 };
 
