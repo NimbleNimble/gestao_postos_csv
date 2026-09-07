@@ -4,8 +4,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { getData } from '../services/dataService'
+import { defineProps } from 'vue'
 
 const dataHeaders = [
     { title: 'CNPJ', align: 'start', key: 'cnpj' },
@@ -31,11 +30,11 @@ const dataHeaders = [
     { title: 'Observações', align: 'start', key: 'observacoes' }
 ]
 
-const dataContent = ref([])
 
-onMounted(() => {
-    getData().then(data => {
-        dataContent.value = data.data
-    })
-});
+const props = defineProps({
+    dataContent: {
+        type: Array,
+        required: true
+    }
+})
 </script>
