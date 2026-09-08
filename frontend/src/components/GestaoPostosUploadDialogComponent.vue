@@ -59,7 +59,6 @@
                         <v-btn class="px-6" variant="outlined" color="grey-darken-1" text="Cancelar"
                             @click="closeDialog(isActive)" />
 
-                        <!-- // TODO: recarregar listagem -->
                         <v-btn class="px-6" variant="flat" color="red-darken-4" text="Enviar" :disabled="!isCsvValid"
                             @click="sendFile(isActive);" />
                     </v-card-actions>
@@ -73,6 +72,8 @@
 import { ref, computed } from 'vue'
 import { uploadFile } from '../services/dataService'
 import GestaoPostosLoadingComponent from './GestaoPostosLoadingComponent.vue'
+import { dataStore } from '../stores/dataStore.js'
+const { loadDataContent } = dataStore()
 
 const file = ref(null)
 const errorMessage = ref('')
@@ -107,7 +108,10 @@ const sendFile = async (isActive) => {
     try {
         const response = await uploadFile(file.value);
         if (response.status === 'error') throw new Error(response.message);
-        else closeDialog(isActive)
+        else {
+            closeDialog(isActive)
+            loadDataContent();
+        }
     } catch (error) {
         errorMessage.value = error.message
     } finally {

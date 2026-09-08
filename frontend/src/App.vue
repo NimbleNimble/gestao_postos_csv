@@ -21,7 +21,7 @@
             prepend-icon="mdi-download" class="font-weight-bold" @click="downloadCsv" />
         </div>
         <v-divider class="my-6"></v-divider>
-        <GestaoPostosTableComponent :data-content="dataContent" />
+        <GestaoPostosTableComponent :dataContent="dataContent" />
       </v-container>
 
     </v-main>
@@ -29,22 +29,19 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import GestaoPostosHeaderComponent from './components/GestaoPostosHeaderComponent.vue'
 import GestaoPostosTableComponent from './components/GestaoPostosTableComponent.vue'
-import { getData } from './services/dataService'
 import GestaoPostosUploadDialogComponent from './components/GestaoPostosUploadDialogComponent.vue'
-
-const dataContent = ref([])
-
-onMounted(() => {
-  getData().then(data => {
-    dataContent.value = data.data
-  })
-});
+import { dataStore } from './stores/dataStore.js'
+const { dataContent, loadDataContent } = dataStore()
 
 function downloadCsv() {
   // TODO: Revisar/Aprimorar isto
   window.location.href = "http://localhost:3000/list/export";
 }
+
+onMounted(() => {
+  loadDataContent();
+});
 </script>
