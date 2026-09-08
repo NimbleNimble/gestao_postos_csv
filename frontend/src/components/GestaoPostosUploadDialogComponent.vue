@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <GestaoPostosLoadingComponent :isLoading="isLoading" />
         <v-dialog transition="dialog-bottom-transition" fullscreen>
             <template v-slot:activator="{ props: activatorProps }">
                 <v-btn title="Importe o relatório em arquivo CSV para atualizar a base de dados" v-bind="activatorProps"
@@ -39,9 +40,9 @@
                         <v-btn class="px-6" variant="outlined" color="grey-darken-1" text="Cancelar"
                             @click="closeDialog(isActive)" />
 
-                        // TODO: recarregar listagem
+                        <!-- // TODO: recarregar listagem -->
                         <v-btn class="px-6" variant="flat" color="red-darken-4" text="Enviar" :disabled="!isCsvValid"
-                            @click="uploadFile(file); closeDialog(isActive)" />
+                            @click="sendFile(isActive);" />
                     </v-card-actions>
                 </v-card>
             </template>
@@ -52,9 +53,11 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { uploadFile } from '../services/dataService'
+import GestaoPostosLoadingComponent from './GestaoPostosLoadingComponent.vue'
 
 const file = ref(null)
 const errorMessage = ref('')
+const isLoading = ref(false)
 
 const isCsvValid = computed(() => {
     if (!file.value) return false
@@ -77,5 +80,19 @@ const closeDialog = (isActive) => {
     file.value = null
     errorMessage.value = ''
     isActive.value = false
+}
+
+const sendFile = async (isActive) => {
+    if (!file.value) return
+    isLoading.value = true
+    try {
+        const response = await uploadFile(file.value);
+        if (response.status === 'error') throw new Error(response.message);
+        else closeDialog(isActive)
+    } catch (error) {
+        errorMessage.value = error.message
+    } finally {
+        isLoading.value = false
+    }
 }
 </script>
