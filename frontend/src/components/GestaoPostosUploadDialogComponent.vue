@@ -25,20 +25,22 @@
                             Selecione ou arraste a planilha de postos de combustíveis no formato <strong>.CSV</strong>
                             para atualizar a base de dados.
                         </p>
+                        <v-alert v-if="errorMessage" type="error" variant="tonal" class="mb-4" closable
+                            @click:close="errorMessage = ''">
+                            {{ errorMessage }}
+                        </v-alert>
 
                         <v-file-upload clearable accept=".csv, text/csv" v-model="file" class="mt-4" density="default"
                             title="Arraste e solte o arquivo CSV aqui" browse-text="Procurar no computador"
-                            divider-text="ou"></v-file-upload>
+                            divider-text="ou" @change="onFileChange"></v-file-upload>
                     </v-card-text>
 
                     <v-card-actions class="justify-end pa-4">
                         <v-btn class="px-6" variant="outlined" color="grey-darken-1" text="Cancelar"
                             @click="closeDialog(isActive)" />
 
-                        <!-- TODO: Pensar em outras cores para confirmar -->
-                        <v-btn class="px-6" variant="flat" color="red-darken-2" text="Enviar"
-                            :disabled="!file || !file.name.endsWith('.csv')"
-                            @click="uploadFile(file); isActive.value = false" />
+                        <v-btn class="px-6" variant="flat" color="red-darken-4" text="Enviar" :disabled="!isCsvValid"
+                            @click="uploadFile(file); closeDialog(isActive)" />
                     </v-card-actions>
                 </v-card>
             </template>
@@ -47,13 +49,32 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { uploadFile } from '../services/dataService'
 
 const file = ref(null)
+const errorMessage = ref('')
+
+const isCsvValid = computed(() => {
+    if (!file.value) return false
+    const fileName = file.value.name || ''
+    return fileName.toLowerCase().endsWith('.csv')
+})
+
+const onFileChange = (newFile) => {
+    errorMessage.value = ''
+    if (newFile) {
+        const fileName = newFile.name || ''
+        if (!fileName.toLowerCase().endsWith('.csv')) {
+            errorMessage.value = 'Formato inválido! Por favor, selecione apenas arquivos com extensão .csv.'
+            file.value = null
+        }
+    }
+}
 
 const closeDialog = (isActive) => {
     file.value = null
+    errorMessage.value = ''
     isActive.value = false
 }
 </script>
