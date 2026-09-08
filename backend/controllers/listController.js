@@ -18,9 +18,9 @@ const getPostos = async () => {
             r.nome AS nome_responsavel, 
             r.email AS email_responsavel, 
             r.cargo AS cargo_responsavel, 
-            COALESCE(STRING_AGG(c.nome, ', ' ORDER BY c.nome DESC), '') AS combustiveis, 
+            COALESCE(STRING_AGG(c.nome, ',' ORDER BY c.nome DESC), '') AS combustiveis, 
             s.nome AS status, 
-            p.data_inauguracao, 
+            TO_CHAR(p.data_inauguracao, 'DD/MM/YYYY') AS data_inauguracao, 
             p.numero_bicos, 
             p.numero_pistas, 
             p.observacoes 
@@ -40,7 +40,8 @@ const getPostos = async () => {
             r.nome, 
             r.email, 
             r.cargo, 
-            s.nome;
+            s.nome
+        ORDER BY p.id ASC;
       `,
   );
   return result.rows;
@@ -70,8 +71,8 @@ const exportController = async (req, res) => {
 
     const escapeCsv = (value) => {
       if (value === null || value === undefined) return "";
-      const text = String(value).replace(/"/g, '""');
-      return /[",\r\n]/.test(text) ? `"${text}"` : text;
+      const text = String(value).trim().replace(/"/g, '""');
+      return /[";\r\n]/.test(text) ? `"${text}"` : text;
     };
 
     const csv = [
