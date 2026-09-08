@@ -31,9 +31,28 @@
                             {{ errorMessage }}
                         </v-alert>
 
-                        <v-file-upload clearable accept=".csv, text/csv" v-model="file" class="mt-4" density="default"
-                            title="Arraste e solte o arquivo CSV aqui" browse-text="clique para localizar"
-                            divider-text="ou" @change="onFileChange(file)"></v-file-upload>
+                        <v-file-upload v-if="!file" accept=".csv, text/csv" v-model="file" class="mt-4"
+                            density="default" title="Arraste e solte o arquivo CSV aqui"
+                            browse-text="clique para localizar" divider-text="ou"
+                            @change="selectFile(file)"></v-file-upload>
+
+                        <v-card v-else class="mt-4" variant="outlined" elevation="0"
+                            style="border: solid 2px #E0E0E0; background: #ffffff;">
+                            <v-card-text class="d-flex align-center px-6 py-3">
+                                <v-icon class="mr-6" size="25" color="grey-darken-1">
+                                    mdi-file-document
+                                </v-icon>
+                                <div class="file-details">
+                                    <div class="text-body-1">{{ file?.name }}</div>
+                                    <div class="text-caption">
+                                        {{ file?.type || 'text/csv' }}{{ formatFileSize(file?.size) }}
+                                    </div>
+                                </div>
+                                <v-btn class="ml-auto mt-1" icon="mdi-close-circle" variant="text"
+                                    aria-label="Remover arquivo" title="Remover arquivo" :disabled="isLoading"
+                                    @click="file = null" />
+                            </v-card-text>
+                        </v-card>
                     </v-card-text>
 
                     <v-card-actions class="justify-end pa-4">
@@ -65,7 +84,7 @@ const isCsvValid = computed(() => {
     return fileName.toLowerCase().endsWith('.csv')
 })
 
-const onFileChange = (newFile) => {
+const selectFile = (newFile) => {
     errorMessage.value = ''
     if (newFile) {
         const fileName = newFile.name || ''
@@ -94,5 +113,17 @@ const sendFile = async (isActive) => {
     } finally {
         isLoading.value = false
     }
+}
+
+const formatFileSize = (size) => {
+    if (typeof size !== 'number' || size <= 0) return ''
+    const units = ['B', 'KB', 'MB', 'GB', 'TB']
+    let unitIndex = 0
+    let adjustedSize = size
+    while (adjustedSize >= 1024 && unitIndex < units.length - 1) {
+        adjustedSize /= 1024
+        unitIndex++
+    }
+    return ` (${adjustedSize.toFixed(2)} ${units[unitIndex]})`
 }
 </script>
