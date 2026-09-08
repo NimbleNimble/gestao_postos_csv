@@ -13,38 +13,27 @@
 
             <template v-slot:default="{ isActive }">
                 <v-card>
-                    <v-toolbar color="red-darken-4" title="Importr arquivo CSV">
+                    <v-toolbar color="red-darken-4" title="Importar arquivo CSV">
                         <v-spacer></v-spacer>
-                        <v-btn icon @click="isActive.value = false">
+                        <v-btn icon @click="closeDialog(isActive)">
                             <v-icon>mdi-close</v-icon>
                         </v-btn>
                     </v-toolbar>
 
-                    <v-card-text class="">
-                        <!-- TODO: Melhorar texto e modal -->
-                        <p class="text-block text-subtitle-1">
-                            Loren ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                            eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat.
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                            fugiat nulla pariatur.
-                            Loren ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                            eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat.
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                            fugiat nulla pariatur.
+                    <v-card-text class="pt-6">
+                        <p class="text-subtitle-1 text-grey-darken-3 mb-2">
+                            Selecione ou arraste a planilha de postos de combustíveis no formato <strong>.CSV</strong>
+                            para atualizar a base de dados.
                         </p>
-                        <v-file-upload v-model="file" class="mt-7" density="default" title="Arraste e solte"
-                            browse-text="Selecione arquivo" divider-text="ou"></v-file-upload>
+
+                        <v-file-upload clearable accept=".csv, text/csv" v-model="file" class="mt-4" density="default"
+                            title="Arraste e solte o arquivo CSV aqui" browse-text="Procurar no computador"
+                            divider-text="ou"></v-file-upload>
                     </v-card-text>
 
-                    <v-card-actions class="justify-end">
-                        <v-btn class="px-6" variant="outlined" color="red-darken-2" text="Cancelar"
-                            @click="isActive.value = false" />
+                    <v-card-actions class="justify-end pa-4">
+                        <v-btn class="px-6" variant="outlined" color="grey-darken-1" text="Cancelar"
+                            @click="closeDialog(isActive)" />
 
                         <!-- TODO: Pensar em outras cores para confirmar -->
                         <v-btn class="px-6" variant="flat" color="red-darken-2" text="Enviar"
@@ -60,6 +49,11 @@
 <script setup>
 import { ref } from 'vue'
 import { uploadFile } from '../services/dataService'
+
 const file = ref(null)
 
+const closeDialog = (isActive) => {
+    file.value = null
+    isActive.value = false
+}
 </script>
