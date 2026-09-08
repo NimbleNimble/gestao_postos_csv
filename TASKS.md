@@ -15,10 +15,10 @@ Upload e Processamento de CSV com validação/sanitização, persistência em ba
 
 - [x] ~~[FRONT] Desenvolver tela/componente "drag & drop"~~
 - [x] ~~[BACK] Receber dados / processar CSV~~
-- [ ] [BACK] Sanitizar/normalizar dados
-- [ ] [BACK] Aplicar regras de negócio / lógica de validação
-- [x] [BACK] ~~Salvar dados no banco~~
-- [ ] [FRONT/BACK] Tratar e exibir alertas de erro
+- [x] [BACK] Sanitizar/normalizar dados
+- [x] [BACK] Aplicar regras de negócio / lógica de validação
+- [x] ~~[BACK] Salvar dados no banco~~
+- [x] ~~[FRONT/BACK] Tratar e exibir alertas de erro~~
 
 ### História3: Visualização - (3h)
 
@@ -32,7 +32,7 @@ Exibição de dados em tela
 Consulta ao banco e criação de arquivo CSV
 
 - [x] ~~[BACK] Consultar listagem de postos no banco~~
-- [ ] [BACK] Formatar dados conforme arquivo original
+- [x] ~~[BACK] Formatar dados conforme arquivo original~~
 - [x] ~~[BACK] Criar arquivo para download~~
 - [x] ~~[FRONT] Criar Botão "download/exportar" e exibir status do download~~
 
@@ -40,5 +40,5 @@ Consulta ao banco e criação de arquivo CSV
 
 Organizar documentação, descrever passo a passo de instalação e decisões
 
-- [ ] [DOC] Descrever README.md com pré-requisitos, instruções de instalação e execução
-- [ ] [DOC] Descrever "DECISOES.md"
+- [x] ~~[DOC] Descrever README.md com pré-requisitos, instruções de instalação e execução~~
+- [x] ~~[DOC] Descrever "DECISOES.md"~~
