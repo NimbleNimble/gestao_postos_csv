@@ -12,7 +12,7 @@
             </template>
 
             <template v-slot:default="{ isActive }">
-                <v-card>
+                <v-card class="bg-grey-lighten-4">
                     <v-toolbar color="red-darken-4" title="Importar arquivo CSV">
                         <v-spacer></v-spacer>
                         <v-btn icon @click="closeDialog(isActive)">
@@ -31,14 +31,15 @@
                         </v-alert>
 
                         <v-file-upload clearable accept=".csv, text/csv" v-model="file" class="mt-4" density="default"
-                            title="Arraste e solte o arquivo CSV aqui" browse-text="Procurar no computador"
-                            divider-text="ou" @change="onFileChange"></v-file-upload>
+                            title="Arraste e solte o arquivo CSV aqui" browse-text="clique para localizar"
+                            divider-text="ou" @change="onFileChange(file)"></v-file-upload>
                     </v-card-text>
 
                     <v-card-actions class="justify-end pa-4">
                         <v-btn class="px-6" variant="outlined" color="grey-darken-1" text="Cancelar"
                             @click="closeDialog(isActive)" />
 
+                        // TODO: recarregar listagem
                         <v-btn class="px-6" variant="flat" color="red-darken-4" text="Enviar" :disabled="!isCsvValid"
                             @click="uploadFile(file); closeDialog(isActive)" />
                     </v-card-actions>

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="bg-grey-lighten-4">
     <GestaoPostosHeaderComponent />
     <v-main>
       <v-container fluid class="fill-height flex-column justify-center px-6 text-center" v-if="!dataContent.length">
