@@ -13,11 +13,6 @@ export const up = (pgm) => {
     id: "id",
     nome: { type: "varchar(255)", notNull: true, unique: true },
   });
-
-  // TODO: Verificar se unique está funcionando corretamente
-  // pgm.addConstraint("status", "status_nome_unique", {
-  //   unique: ["nome"],
-  // });
 };
 
 /**
