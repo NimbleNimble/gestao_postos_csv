@@ -1,5 +1,4 @@
-// TODO: Mover para .env
-const API_URL = "http://localhost:3000";
+export const API_URL = import.meta.env.VITE_BACKEND_API_URL;
 
 export const uploadFile = (file) => {
   const formData = new FormData();
@@ -8,6 +7,10 @@ export const uploadFile = (file) => {
     method: "POST",
     body: formData,
   }).then((response) => response.json());
+};
+
+export const downloadFile = () => {
+  window.location.href = `${API_URL}/list/export`;
 };
 
 export const getData = () => {

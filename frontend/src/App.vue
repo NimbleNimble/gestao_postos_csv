@@ -18,7 +18,7 @@
         <div class="d-flex justify-space-between align-center mb-3">
           <span class="text-h5 font-weight-thin">Listagem de Postos</span>
           <v-btn title="Exportar relatório em .CSV" text="Baixar .CSV" variant="flat" color="red-darken-4"
-            prepend-icon="mdi-download" class="font-weight-bold" @click="downloadCsv" />
+            prepend-icon="mdi-download" class="font-weight-bold" @click="downloadFile" />
         </div>
         <v-divider class="my-6"></v-divider>
         <GestaoPostosTableComponent :dataContent="dataContent" />
@@ -29,17 +29,13 @@
 </template>
 
 <script setup>
+import { downloadFile } from './services/dataService'
 import { onMounted } from 'vue'
 import GestaoPostosHeaderComponent from './components/GestaoPostosHeaderComponent.vue'
 import GestaoPostosTableComponent from './components/GestaoPostosTableComponent.vue'
 import GestaoPostosUploadDialogComponent from './components/GestaoPostosUploadDialogComponent.vue'
 import { dataStore } from './stores/dataStore.js'
 const { dataContent, loadDataContent } = dataStore()
-
-function downloadCsv() {
-  // TODO: Revisar/Aprimorar isto
-  window.location.href = "http://localhost:3000/list/export";
-}
 
 onMounted(() => {
   loadDataContent();
