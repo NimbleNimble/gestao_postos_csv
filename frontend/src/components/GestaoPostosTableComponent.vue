@@ -1,6 +1,22 @@
 <template>
-    <v-data-table-virtual :headers="dataHeaders" :items="dataContent" item-value="cnpj"
-        fixed-header></v-data-table-virtual>
+    <v-data-table-virtual :headers="dataHeaders" :items="dataContent" item-value="cnpj" fixed-header>
+        <template #item.cnpj="{ item }">
+            {{ formatCnpj(item.cnpj) }}
+        </template>
+        <template #item.cep="{ item }">
+            {{ formatCep(item.cep) }}
+        </template>
+        <template #item.cpf_responsavel="{ item }">
+            {{ formatCpf(item.cpf_responsavel) }}
+        </template>
+        <template #item.combustiveis="{ item }">
+            <ul class="combustiveis-list">
+                <li v-for="combustivel in formatCombustiveis(item.combustiveis)" :key="combustivel">
+                    {{ combustivel }}
+                </li>
+            </ul>
+        </template>
+    </v-data-table-virtual>
 </template>
 
 <script setup>
@@ -30,11 +46,54 @@ const dataHeaders = [
     { title: 'Observações', align: 'start', key: 'observacoes' }
 ]
 
-
 const props = defineProps({
     dataContent: {
         type: Array,
         required: true
     }
 })
+
+const formatCnpj = (value) => {
+    const rawValue = String(value ?? '').trim().replace(',', '.')
+    const numericValue = Number(rawValue)
+    const normalizedValue = Number.isFinite(numericValue)
+        ? numericValue.toFixed(0)
+        : rawValue
+    const digits = normalizedValue.replace(/\D/g, '').slice(0, 14)
+
+    if (digits.length !== 14) return value ?? ''
+
+    return digits.replace(
+        /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+        '$1.$2.$3/$4-$5'
+    )
+}
+
+const formatCep = (value) => {
+    const digits = String(value ?? '').replace(/\D/g, '')
+
+    if (digits.length !== 8) return value ?? ''
+
+    return digits.replace(/^(\d{5})(\d{3})$/, '$1-$2')
+}
+
+const formatCpf = (value) => {
+    const digits = String(value ?? '').replace(/\D/g, '')
+
+    if (digits.length !== 11) return value ?? ''
+
+    return digits.replace(
+        /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+        '$1.$2.$3-$4'
+    )
+}
+
+const formatCombustiveis = (value) => {
+    if (Array.isArray(value)) return value
+
+    return String(value ?? '')
+        .split(',')
+        .map((combustivel) => combustivel.trim())
+        .filter(Boolean)
+}
 </script>
