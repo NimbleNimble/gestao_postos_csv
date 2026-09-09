@@ -1,35 +1,95 @@
-## 1. Escolha das Tecnologias e Bibliotecas
+# Decisões técnicas
 
-A aplicação foi desenvolvida com uma stack simples e eficiente para o escopo do desafio: **Vue.js**, **Vuetify**, **Node.js + Express** e **PostgreSQL**. Essa combinação alinha bem com a necessidade de interface web, processamento de arquivos CSV e persistência relacional de forma organizada e escalonável.
+## 1. Modelagem do banco
 
-> Todo o processamento de dados, incluindo importação, exportação, formatação e persistência, é realizado pelo backend, o que facilita a manutenção, segue boas práticas e melhora a performance geral do sistema.
+Foi utilizado um modelo relacional no PostgreSQL, sem ORM, usando o pacote "pg".
 
-### Bibliotecas e motivos de uso
+O modelo relacional foi escolhido para reduzir a repetição de dados e representar corretamente os relacionamentos.
 
-- **Multer:** utilizado para receber os arquivos enviados via `multipart/form-data`, armazenando-os em memória com `MemoryStorage` e convertendo o conteúdo diretamente em `Buffer`. Isso agiliza o processamento do upload para arquivos de tamanho moderado sem necessidade de salvar temporariamente no disco.
-- **CORS:** essencial para permitir que o frontend, executado em uma porta/host diferente, consiga consumir os endpoints do backend sem bloqueios de segurança do navegador.
+A tabela "postos' armazena os dados principais e possui relacionamentos com:
 
----
+- "responsaveis"
+- "bandeiras"
+- "municipios"
+- "status"
+- "combustiveis", (por meio da tabela "postos_combustiveis")
 
-## 2. Modelagem Relacional e Normalização do Banco
+Essa separação evita repetição de dados e representa corretamente os relacionamentos:
 
-Cada linha do CSV importado contém informações de duas entidades principais. Para representá-las de forma organizada, o banco foi modelado com tabelas separadas para **postos** e **responsáveis**.
+- **Responsável e Posto** - Um responsável pode estar associado a vários postos (1:N)
+- **Bandeira e Posto** - Uma bandeira pode estar associada a vários postos (1:N)
+- **Município e Posto** - Um município pode possuir vários postos (1:N)
+- **Status e Posto** - Um status pode estar associado a vários postos (1:N)
+- **Combustível e Posto** - Um posto pode comercializar vários combustíveis, e um combustível pode estar associado a vários postos (N:N)
 
-A fim de evitar duplicidade e redundância de dados, também foram criadas tabelas de apoio para relacionamentos 1:n. Entidades como **bandeiras**, **combustíveis** e **status** poderiam ser armazenadas como colunas do tipo `ENUM` na tabela de postos, mas essa abordagem limitaria a inserção de novos valores no futuro e aumentaria a rigidez do schema.
+Foram utilizadas restrições "UNIQUE" para evitar duplicidades.
 
-O mesmo raciocínio vale para a tabela de **municípios**: o banco permite cidades com o mesmo nome desde que pertençam a unidades federativas diferentes, evitando conflitos e preservando a integridade dos dados.
+- O campo "cnpj" identifica unicamente um **posto**.
+- O "cpf" identifica um **responsável**.
+- Cada registro de **bandeira**, **combustível** e **status** é identificada respectivamente referência "nome".
+- Para **municípios**, utiliza-se a combinação de "nome" + "uf", pois cidades com o mesmo nome podem existir em estados diferentes.
 
-Além disso, foi criada a tabela `postos_combustiveis` para representar o relacionamento n:n entre postos e combustíveis, permitindo que um posto venda vários produtos e que um combustível esteja associado a vários postos ao mesmo tempo.
+## 2. Importação, validação e duplicidades
 
-A arquitetura completa do banco está descrita em `DATABASE.md`.
+O backend recebe arquivos CSV separados por ponto e vírgula.
 
-- **Chaves únicas (`UNIQUE`):**
-  - `cnpj` na tabela `postos` garante idempotência na importação.
-  - `cpf` na tabela `responsaveis` permite verificar se o responsável já está cadastrado antes de inserir um novo registro.
-  - `nome` em `bandeiras` e `combustiveis` evita duplicidade de termos parecidos.
+A importação:
 
-## 3. Considerações Finais
+- verifica se o arquivo existe, não está vazio e possui extensão ".csv"
+- valida a presença de todos os cabeçalhos
+- valida os campos obrigatórios de cada linha
+- remove espaços extras dos valores
+- converte a data para o formato padrão
+- separa a lista de combustíveis por vírgula
 
-O projeto foi pensado para equilibrar simplicidade, clareza de modelagem e capacidade de evolução. A estrutura relacional escolhida facilita manutenção, evita redundância e permite que o sistema suporte novos registros e regras de negócio sem necessariamente alterar a lógica principal de importação e exportação.
+Os campos obrigatórios por linha são:
+"cnpj", "nome_posto", "bandeira", "logradouro", "bairro", "municipio", "uf", "cep", "cpf_responsavel", "nome_responsavel", "combustiveis" e "status".
 
-> Observação: o GitFlow foi ignorado por se tratar de um projeto pequeno, não publicado e desenvolvido por uma única pessoa.
+Os demais campos podem ficar vazios sem gerar erros.
+
+O CNPJ é utilizado para identificar se o posto já existe. Registros duplicados não criam novos postos. As tabelas de referência reutilizam registros existentes por meio de chaves únicas e "ON CONFLICT".
+
+Combustíveis que ainda não existem são cadastrados automaticamente durante a importação.
+
+## 3. Exportação
+
+A exportação é feita pelo backend e mantém o mesmo formato do arquivo de entrada:
+
+- mesmas colunas
+- mesma ordem
+- separador ";"
+- combustíveis agrupados em uma única coluna, com vírgulas e sem espaço entre eles, conforme referência original
+- datas no formato "DD/MM/AAAA"
+
+Os dados são reconstruídos com JOINs e STRING_AGG, combinando as informações normalizadas em uma única linha compatível com o formato de entrada.
+
+## 4. Trade-offs
+
+A solução atual foi implementada para atender ao volume esperado do desafio.
+A exportação consulta os dados e monta o CSV em memória, o que simplifica a implementação e é suficiente para esse volume.
+Para bases significativamente maiores, seria preferível utilizar streaming, evitando manter todo o resultado em memória.
+
+Para manter a primeira versão simples, foram assumidas algumas limitações:
+
+- o upload carrega o arquivo inteiro em memória
+- a exportação monta o CSV antes de enviá-lo
+- a listagem retorna todos os registros
+- A importação ainda não utiliza uma transação única para todo o arquivo. Cada linha é processada individualmente. Se ocorrer um erro no meio do processamento os registros anteriores podem permanecer salvos, enquanto os registros seguintes não serão processados.
+- O parser atende ao formato esperado pelo desafio, mas não trata todos os formatos possíveis de CSV, como por exemplo um campo que contenha ponto e vírgula (";")
+
+Essas escolhas são adequadas para o escopo inicial, mas precisam ser revistas para volumes ainda maiores.
+
+## 5. O que faria diferente com mais tempo
+
+- Utilizaria processamento em stream para importação e exportação
+- Adicionaria transações e inserções em lote
+- Implementaria paginação na listagem
+- Exibiria um relatório detalhado de linhas importadas e rejeitadas
+- Utilizaria uma biblioteca completa para parsing de CSV
+- Adicionaria testes automatizados para validação, duplicidades e reimportação
+- Faria validações mais completas de CPF e CNPJ
+- Criaria outros relatórios analíticos para cruzar os dados importados, como por exemplo ranking de:
+- - Responsáveis com maior número de postos
+- - Bandeiras com maior quantidade de postos
+- - Município, com quantidade de postos e bandeiras utilizadas
+- Implementaria busca e filtros para localizar postos por nome, nome fantasia ou CNPJ, além de permitir a busca por nome ou CPF do responsável.
