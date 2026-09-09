@@ -60,9 +60,9 @@ De acordo com o arquivo `docker-compose.yml`, os ambientes devem rodar nos segui
 
 #### Backend (Node + Express)
 
-- http://localhost:3000/upload
-- http://localhost:3000/list
-- http://localhost:3000/list/export
+- http://localhost:3000/postos
+- http://localhost:3000/postos/export
+- http://localhost:3000/postos/import
 
 #### Database (Postgre)
 

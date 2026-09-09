@@ -363,4 +363,4 @@ const createPostosCombustiveis = async (postoId, combustiveisIds) => {
   }
 };
 
-module.exports = uploadController;
+module.exports = { uploadController };
