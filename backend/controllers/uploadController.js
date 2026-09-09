@@ -28,12 +28,13 @@ const NOT_NULL_FIELDS = [
   { key: "cnpj", label: "CNPJ" },
   { key: "nome_posto", label: "Nome do Posto" },
   { key: "bandeira", label: "Bandeira" },
+  { key: "logradouro", label: "Logradouro" },
+  { key: "bairro", label: "Bairro" },
   { key: "municipio", label: "Município" },
   { key: "uf", label: "UF" },
+  { key: "cep", label: "CEP" },
   { key: "cpf_responsavel", label: "CPF do Responsável" },
   { key: "nome_responsavel", label: "Nome do Responsável" },
-  { key: "email_responsavel", label: "E-mail do Responsável" },
-  { key: "cargo_responsavel", label: "Cargo do Responsável" },
   { key: "combustiveis", label: "Combustíveis" },
   { key: "status", label: "Status" },
 ];
@@ -50,7 +51,7 @@ const uploadController = async (req, res) => {
       const responsavelId = await createResponsavel({
         cpf: element.cpf_responsavel?.trim(),
         nome: element.nome_responsavel?.trim(),
-        email: element.email_responsavel?.trim(),
+        email: element.email_responsavel?.trim() || null,
         cargo: element.cargo_responsavel?.trim(),
       });
 

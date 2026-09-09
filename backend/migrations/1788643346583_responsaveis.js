@@ -13,8 +13,8 @@ export const up = (pgm) => {
     id: "id",
     cpf: { type: "char(11)", notNull: true, unique: true },
     nome: { type: "varchar(255)", notNull: true },
-    email: { type: "varchar(255)", notNull: true, unique: true },
-    cargo: { type: "varchar(255)", notNull: true },
+    email: { type: "varchar(255)", unique: true },
+    cargo: { type: "varchar(255)" },
   });
 };
 
